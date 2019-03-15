@@ -14,15 +14,27 @@ class CarSprite():
         self.theta = self.carSprite.rotation
     def draw(self):
         self.carSprite.draw()
+    
+    def getX(self):
+        self.x = self.carSprite.x
+        return self.x
+    def getY(self):
+        self.y = self.carSprite.y
+        return self.y
+    def getTheta(self):
+        self.theta = self.carSprite.rotation
+        return self.theta
+
     def updateX(self,value):
-        value += self.carSprite.x
+        value += self.getX()
         self.carSprite.update(x=value)
     def updateY(self,value):
-        value += self.carSprite.y
+        value += self.getY()
         self.carSprite.update(y=value)
     def updateTheta(self,degree):  
-        degree += self.theta 
+        degree += self.getTheta()
         self.carSprite.update(rotation=degree)
+
 
     
 

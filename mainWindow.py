@@ -45,48 +45,58 @@ class MyWindow(pyglet.window.Window):
         self.fps_display = FPSDisplay(self)
         self.car = CarSprite()
         print(self.car.theta)
+        self.key_handler = key.KeyStateHandler()
 
-    def on_key_press(self, symbol,modifiers):
-        if symbol == key.UP:
-            print('accelerate')
-            self.car.updateX(20)
-        elif symbol == key.DOWN:
-            print('reverse')
-            self.car.updateX(-20)
-        elif symbol == key.LEFT:
-            print('turn left')
-            #self.car.updateY(20)
-            self.car.updateTheta(-2)
-        elif symbol == key.RIGHT:
-            print('turn right')
-            #self.car.updateY(-20)
-            self.car.updateTheta(2)
-        elif symbol == key.ESCAPE:
-            pyglet.app.exit()
-        else:
-            print('key code '+str(symbol))
+    # def on_key_press(self, symbol,modifiers):
+    #     if symbol == key.MOTION_UP:
+    #         print('accelerate')
+    #         self.car.updateX(20)
+    #     elif symbol == key.MOTION_DOWN:
+    #         print('reverse')
+    #         self.car.updateX(-20)
+    #     elif symbol == key.MOTION_LEFT:
+    #         print('turn left')
+    #         #self.car.updateY(20)
+    #         self.car.updateTheta(-2)
+    #     elif symbol == key.MOTION_RIGHT:
+    #         print('turn right')
+    #         #self.car.updateY(-20)
+    #         self.car.updateTheta(2)
+    #     elif symbol == key.ESCAPE:
+    #         pyglet.app.exit()
+    #     else:
+    #         print('key code '+str(symbol))
 
-    def on_key_release(self, symbol, modifiers):
-        if symbol == key.UP:
-            print('release accelerate')
-        elif symbol == key.DOWN:
-            print('release reverse')
-        elif symbol == key.LEFT:
-            print('release turn left')
-        elif symbol == key.RIGHT:
-            print('release turn right')
-        else:
-            print('release key code '+str(symbol))
+    # def on_key_release(self, symbol, modifiers):
+    #     if symbol == key.UP:
+    #         print('release accelerate')
+    #     elif symbol == key.DOWN:
+    #         print('release reverse')
+    #     elif symbol == key.LEFT:
+    #         print('release turn left')
+    #     elif symbol == key.RIGHT:
+    #         print('release turn right')
+    #     else:
+    #         print('release key code '+str(symbol))
 
     def on_draw(self):
         self.clear()
         self.car.draw()
         self.fps_display.draw()
 
+
     def update(self, dt):
-        pass   
+        if self.key_handler[key.LEFT]:
+            print('turn left')
+            #self.car.updateY(20)
+            self.car.updateTheta(-2)
+        if self.key_handler[key.RIGHT]:
+            print('turn right')
+            #self.car.updateY(-20)
+            self.car.updateTheta(2)
 
 if __name__ == "__main__":
     window = MyWindow(WINDOWWIDTH,WINDOWHEIGHT, "DRIFT AI", resizable=True, vsync =True)
+    window.push_handlers(window.key_handler)
     pyglet.clock.schedule_interval(window.update,1/60.0)
     pyglet.app.run()

@@ -37,10 +37,9 @@ class MyWindow(pyglet.window.Window):
         #self.set_minimum_size(400,300)
         glClearColor(1,1.0,1.0,1)
         self.fps_display = FPSDisplay(self)
-        self.image = pyglet.image.load('car_sprite.jpg')
+        self.image = pyglet.image.load('car_sprite_resized10percent.png')
         #self.sprite = pyglet.sprite.Sprite(self.image, -self.width/5, -self.height/5)
         self.sprite = pyglet.sprite.Sprite(self.image, 0, 0)
-        self.sprite.scale = .1
     def on_key_press(self, symbol,modifiers):
         if symbol == key.UP:
             print('accelerate')

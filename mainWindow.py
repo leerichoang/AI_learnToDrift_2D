@@ -8,9 +8,10 @@ WINDOWHEIGHT=720
 class CarSprite():
     def __init__(self):
         self.carSprite_image = pyglet.image.load('car_sprite_resized10percent.png')
-        self.carSprite= pyglet.sprite.Sprite(self.carSprite_image, 0,0)
+        self.carSprite= pyglet.sprite.Sprite(self.carSprite_image, 500,500)
         self.x = self.carSprite.x
         self.y = self.carSprite.y
+        self.theta = self.carSprite.rotation
     def draw(self):
         self.carSprite.draw()
     def updateX(self,value):
@@ -19,6 +20,10 @@ class CarSprite():
     def updateY(self,value):
         value += self.carSprite.y
         self.carSprite.update(y=value)
+    def updateTheta(self,degree):  
+        degree += self.theta 
+        self.carSprite.update(rotation=degree)
+
     
 
 class MyWindow(pyglet.window.Window):
@@ -27,7 +32,7 @@ class MyWindow(pyglet.window.Window):
         glClearColor(1,1.0,1.0,1)
         self.fps_display = FPSDisplay(self)
         self.car = CarSprite()
-        print(self.car.x)
+        print(self.car.theta)
 
     def on_key_press(self, symbol,modifiers):
         if symbol == key.UP:
@@ -38,11 +43,12 @@ class MyWindow(pyglet.window.Window):
             self.car.updateX(-20)
         elif symbol == key.LEFT:
             print('turn left')
-            self.car.updateY(20)
-            self.car.y +=20
+            #self.car.updateY(20)
+            self.car.updateTheta(-2)
         elif symbol == key.RIGHT:
             print('turn right')
-            self.car.updateY(-20)
+            #self.car.updateY(-20)
+            self.car.updateTheta(2)
         elif symbol == key.ESCAPE:
             pyglet.app.exit()
         else:

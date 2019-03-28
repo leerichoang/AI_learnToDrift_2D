@@ -8,7 +8,9 @@ WINDOWHEIGHT=720
 class MyWindow(pyglet.window.Window):
     def __init__(self, *args, **kwargs):
         super(MyWindow,self).__init__(*args, **kwargs)
-        #glClearColor(1,1.0,1.0,1)
+        #this clear thing affect the background color
+        #comment it out to get a black background
+        glClearColor(1,1.0,1.0,1)
         self.fps_display = FPSDisplay(self)
         self.car = CarSprite()
         print(self.car.theta)
@@ -23,6 +25,8 @@ class MyWindow(pyglet.window.Window):
         
         #outer Box
         glBegin(GL_LINES)
+        #this color thing affect the lines
+        glColor3f(1,0,0)
         # create a line, x,y,z
         glVertex3f(40.0,20.0,1)
         glVertex3f(40.0,700,1)

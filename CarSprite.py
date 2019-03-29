@@ -1,6 +1,7 @@
 from pyglet.gl import *
 from pyglet.window import key
 from pyglet.window import FPSDisplay
+import math
 WINDOWWIDTH=1280
 WINDOWHEIGHT=720 
 class CarSprite():
@@ -16,6 +17,8 @@ class CarSprite():
         self.deltaY = 0.0
         print(self.carSprite.width)
         print(self.carSprite.height)
+        self.width = self.carSprite.width
+        self.height = self.carSprite.height
     def draw(self):
         self.carSprite.draw()
     
@@ -50,3 +53,33 @@ class CarSprite():
         self.deltaX = value
     def updateDeltaY(self, value):
         self.deltaY = value
+
+    def turnLeft(self,dt):
+        self.updateTheta(-self.rotation_speed* dt)
+
+    def turnRight(self,dt):
+        self.updateTheta(self.rotation_speed* dt)
+    
+    def goStraight(self,dt):
+        thetaRadian = -math.radians(self.getTheta())
+        deltaX = math.cos(thetaRadian) * self.speed * dt
+        deltaY = math.sin(thetaRadian) * self.speed * dt
+        self.updateX(deltaX)
+        self.updateY(deltaY)
+        self.updateDeltaX(deltaX)
+        self.updateDeltaY(deltaY)
+    
+    def goReverse(self,dt):
+        thetaRadian = -math.radians(self.getTheta())
+        deltaX = math.cos(thetaRadian) * self.speed * dt
+        deltaY = math.sin(thetaRadian) * self.speed * dt
+        self.updateX(-deltaX)
+        self.updateY(-deltaY)
+        self.updateDeltaX(-deltaX)
+        self.updateDeltaY(-deltaY)  
+
+    def runningCar(self,dt):
+        self.updateX(self.getDeltaX())
+        self.updateY(self.getDeltaY())
+        self.updateDeltaX(self.getDeltaX() * 0.95)
+        self.updateDeltaY(self.getDeltaY() * 0.95)

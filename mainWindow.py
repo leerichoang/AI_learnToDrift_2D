@@ -18,8 +18,8 @@ class MyWindow(pyglet.window.Window):
 
 
     def on_draw(self):
-        self.clear()
-        #self.glClear(GL_COLOR_BUFFER_BIT)
+        #self.clear()
+        glClear(GL_COLOR_BUFFER_BIT)
         self.car.draw()
         self.fps_display.draw()
         
@@ -54,60 +54,34 @@ class MyWindow(pyglet.window.Window):
         glVertex3f(240.0,500.0,1)
         glVertex3f(1040.0,500.0,1)
 
+        thetaRadian = -math.radians(self.car.getTheta())
+        deltaX = math.cos(thetaRadian) * self.car.speed 
+        deltaY = math.sin(thetaRadian) * self.car.speed 
 
+        glVertex3f(self.car.getX(),self.car.getY()+(self.car.height/2),1)
+        glVertex3f(self.car.getX()+deltaX,self.car.getY()+deltaY+(self.car.height/2),1)
+        #print("here"+str(self.car.getTheta()))
         glEnd()
 
     def update(self, dt):
         if self.key_handler[key.LEFT]:
             print('turn left')
-            self.car.updateTheta(-self.car.rotation_speed* dt)
+            self.car.turnLeft(dt)
         
         if self.key_handler[key.RIGHT]:
             print('turn right')
-            self.car.updateTheta(self.car.rotation_speed* dt)
-        
+            self.car.turnRight(dt)
+
         if self.key_handler[key.UP]:
-            thetaRadian = -math.radians(self.car.getTheta())
-            deltaX = math.cos(thetaRadian) * self.car.speed * dt
-            deltaY = math.sin(thetaRadian) * self.car.speed * dt
-            self.car.updateX(deltaX)
-            self.car.updateY(deltaY)
-            self.car.updateDeltaX(deltaX)
-            self.car.updateDeltaY(deltaY)
+            self.car.goStraight(dt)
             print(str(self.car.getDeltaX())+' '+str(self.car.getDeltaY()))
 
         if self.key_handler[key.DOWN]:
-            thetaRadian = -math.radians(self.car.getTheta())
-            deltaX = math.cos(thetaRadian) * self.car.speed * dt
-            deltaY = math.sin(thetaRadian) * self.car.speed * dt
-            self.car.updateX(-deltaX)
-            self.car.updateY(-deltaY)
-            self.car.updateDeltaX(-deltaX)
-            self.car.updateDeltaY(-deltaY)  
-
-        self.car.updateX(self.car.getDeltaX())
-        self.car.updateY(self.car.getDeltaY())
-        self.car.updateDeltaX(self.car.getDeltaX() * 0.95)
-        self.car.updateDeltaY(self.car.getDeltaY() * 0.95)
+            self.car.goReverse(dt)
+        self.car.runningCar(dt)
 
 if __name__ == "__main__":
     window = MyWindow(WINDOWWIDTH,WINDOWHEIGHT, "DRIFT AI", resizable=True, vsync =True)
     window.push_handlers(window.key_handler)
     pyglet.clock.schedule_interval(window.update,1/60.0)
     pyglet.app.run()
-
-@window.event 
-def on_draw():
-    # #glClear(GL_COLOR_BUFFER_BIT)
-    # #glBegin(GL_LINES)
-    # glVertex2i(25,75)
-    # glVertex2i(55,66)
-
-    # glVertex2i(80,100)
-    # glVertex2i(70,500)
-    glBegin(GL_LINES)
-    # create a line, x,y,z
-    glVertex3f(100.0,100.0,0.25)
-    glVertex3f(200.0,300.0,-0.75)
-    glEnd()
-    print("here")

@@ -52,17 +52,15 @@ class CarVision:
             testxbounce = (260-b)/slope
         else:
             testxbounce = (260-b)
-        #print(str(int(testxbounce)))
-
-        manitude = 50
+        manitude = 800
         if int(testxbounce) in range(240,1040):
             if not (slope<0) and  (math.cos(self.thetaRadian) > 0) and (math.sin(self.thetaRadian) > 0):
                 print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
                 manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian)) 
-            elif not (slope<0) and  (math.cos(self.thetaRadian) < 0) and (math.sin(self.thetaRadian) < 0):      
-        else:
-            manitude = 50
-
+            if (slope<0) and  (math.cos(self.thetaRadian) < 0) and (math.sin(self.thetaRadian) >= 0):
+                print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
+                manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian)) 
+            print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
         deltaXVision = math.cos(self.thetaRadian) * manitude
         deltaYVision = math.sin(self.thetaRadian) * manitude
         

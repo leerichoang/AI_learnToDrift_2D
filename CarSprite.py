@@ -3,6 +3,7 @@ from pyglet.window import key
 from pyglet.window import FPSDisplay
 import math
 from Line import *
+from CarVision import *
 WINDOWWIDTH=1280
 WINDOWHEIGHT=720 
 class CarSprite():
@@ -22,50 +23,11 @@ class CarSprite():
         print(self.carSprite.height)
         self.width = self.carSprite.width
         self.height = self.carSprite.height
+        self.carVision=CarVision()
     def draw(self):
         self.carSprite.draw()
         thetaRadian = -math.radians(self.getTheta())
-        deltaX = math.cos(thetaRadian) * 50 
-        deltaY = math.sin(thetaRadian) * 50
-
-
-
-
-        deltaX3 = math.cos(thetaRadian+math.pi/4) * math.sqrt((50/2*50/2)*2)
-        deltaY3 = math.sin(thetaRadian+math.pi/4) * math.sqrt((50/2*50/2)*2)
-        X3=self.getX()-deltaX3
-        Y3=self.getY()-deltaY3
-        print(str(X3)+ " "+ str(X3)+ " "+ str(thetaRadian/math.pi)+" "+str((thetaRadian+math.pi)/math.pi) + " " + str(math.sqrt(deltaX3*deltaX3+deltaY3*deltaY3)))
-        
-        #bottom horizontal line at point(X3,Y3)
-        Line(X3,Y3,X3+deltaX, Y3 +deltaY,[0,0,0],1).draw()
-
-
-        deltaX4 = math.cos(thetaRadian-math.pi/4) * math.sqrt((50/2*50/2)*2)
-        deltaY4 = math.sin(thetaRadian-math.pi/4) * math.sqrt((50/2*50/2)*2)
-        X4=self.getX()-deltaX4
-        Y4=self.getY()-deltaY4
-
-        #top horizontal line at point(X4,Y4)
-        Line(X4,Y4,X4+deltaX, Y4 +deltaY,[0,0,0],1).draw()
-
-        #left vertical line
-        Line(X3,Y3,X4,Y4,[0,0,0],1).draw()
-        
-        #right vertical line
-        Line(X3+deltaX, Y3 +deltaY ,X4+deltaX, Y4 +deltaY,[0,0,0],1).draw()
-
-        deltaXVision = math.cos(thetaRadian) * 100 
-        deltaYVision = math.sin(thetaRadian) * 100
-        
-        
-        #middle vision line
-        deltaX2 = math.cos(thetaRadian) * 50/2
-        deltaY2 = math.sin(thetaRadian) * 50/2
-        X2=self.getX()-deltaXVision
-        Y2=self.getY()-deltaYVision
-        Line(X2,Y2,self.getX()+deltaXVision,self.getY()+deltaYVision,[0,0,0],1).draw()
-
+        self.carVision.draw(self.getX(),self.getY(),thetaRadian)
 
 
     def getX(self):

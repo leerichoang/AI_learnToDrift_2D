@@ -47,12 +47,22 @@ class CarVision:
         #x = (b-y)/m
         slope=math.tan(self.thetaRadian)
         b = self.Y - slope*self.X
-        
+        #2
+        if (slope>=0) and  (math.cos(self.thetaRadian) >= 0) and (math.sin(self.thetaRadian) >= 0):
+            manitude = (1240-self.X)/math.cos(self.thetaRadian)
+        elif (slope<0) and  (math.cos(self.thetaRadian) >= 0) and (math.sin(self.thetaRadian) < 0):
+            manitude = (1240-self.X)/math.cos(self.thetaRadian)
+        #1
+        elif (slope>=0) and  (math.cos(self.thetaRadian) < 0) and (math.sin(self.thetaRadian) < 0):
+            manitude = (40-self.X)/math.cos(self.thetaRadian)
+        elif (slope<0) and  (math.cos(self.thetaRadian) <0) and (math.sin(self.thetaRadian) >= 0):
+            manitude = (40-self.X)/math.cos(self.thetaRadian)
+            
+        #8
         if slope!=0:
             testxbounce = (260-b)/slope
         else:
-            testxbounce = (260-b)
-        manitude = 800
+            testxbounce = (260-b)        
         if int(testxbounce) in range(240,1040):
             if not (slope<0) and  (math.cos(self.thetaRadian) > 0) and (math.sin(self.thetaRadian) > 0):
                 print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
@@ -61,6 +71,22 @@ class CarVision:
                 print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
                 manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian)) 
             print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
+        
+        #4
+        if slope!=0:
+            testxbounce = (60-b)/slope
+        else:
+            testxbounce = (60-b)
+        if int(testxbounce) in range(40,1240):
+            if (slope<0) and  (math.cos(self.thetaRadian) >= 0) and (math.sin(self.thetaRadian) < 0):
+                print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
+                manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian))
+            if (slope>=0) and  (math.cos(self.thetaRadian) < 0) and (math.sin(self.thetaRadian) < 0):
+                print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
+                manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian)) 
+
+        
+        
         deltaXVision = math.cos(self.thetaRadian) * manitude
         deltaYVision = math.sin(self.thetaRadian) * manitude
         
@@ -77,10 +103,11 @@ class CarVision:
         X2=self.X
         Y2=self.Y
         Line(X2,Y2,self.X+deltaXVision,self.Y+deltaYVision,[0,0,0],1).draw()
-        
+        print(str(int(X2))+ " "+str(int(Y2))+ " "+ str(int(deltaXVision))+ " "+str(int(deltaYVision)) + " " + str(self.thetaRadian) + " "+ str(slope))
         self.boundX1=[X3,Y3]
         self.boundY1=[X3+deltaX,Y3 +deltaY]
         self.boundX2=[X4,Y4]
         self.boundY2=[X4+deltaX, Y4 +deltaY]
 
-        
+
+

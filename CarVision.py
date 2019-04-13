@@ -41,9 +41,9 @@ class CarVision:
         #right vertical line
         Line(X3+deltaX, Y3 +deltaY ,X4+deltaX, Y4 +deltaY,[0,0,0],1).draw()
 
-        for i in range(-4,4,1):
+        for i in range(-4,4,4):
             rToAdd = i * math.pi/4 
-
+            #rToAdd = 0 * math.pi/4 
         #y=mx+b
         #b=y - mx
         #x = (b-y)/m
@@ -67,12 +67,12 @@ class CarVision:
                 testxbounce = (260-b)        
             if int(testxbounce) in range(240,1040):
                 if not (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) > 0) and (math.sin(self.thetaRadian+ rToAdd) > 0):
-                    print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
+                    #print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
                     manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
                 if (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
-                    print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
+                    #print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
                     manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
-                print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
+                #print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
             
             #4
             if slope!=0:
@@ -81,10 +81,10 @@ class CarVision:
                 testxbounce = (60-b)
             if int(testxbounce) in range(40,1240):
                 if (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                    print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
+                    #print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
                     manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd))
                 if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                    print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
+                    #print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
                     manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
 
             
@@ -105,11 +105,27 @@ class CarVision:
             X2=self.X
             Y2=self.Y
             Line(X2,Y2,self.X+deltaXVision,self.Y+deltaYVision,[0,0,0],1).draw()
-            print(str(int(X2))+ " "+str(int(Y2))+ " "+ str(int(deltaXVision))+ " "+str(int(deltaYVision)) + " " + str(self.thetaRadian) + " "+ str(slope))
+            #print(str(int(X2))+ " "+str(int(Y2))+ " "+ str(int(deltaXVision))+ " "+str(int(deltaYVision)) + " " + str(self.thetaRadian) + " "+ str(slope) )
+            distance = math.sqrt(deltaXVision*deltaXVision + deltaYVision* deltaYVision) -25
+            self.lineLabel = pyglet.text.Label( ( str(int(distance))+ " (" + str(int(self.X+deltaXVision)) + "," +str(int(self.Y+deltaYVision))+ ")"),
+                font_name='Times New Roman',                      
+                font_size=10,
+                x=self.X+deltaXVision, y=self.Y+deltaYVision,
+                anchor_x='center', anchor_y='center',color=(0, 0, 255, 255))
+            self.lineLabel.draw()
+        self.centerLabel = pyglet.text.Label(("Center X = " + str(int(self.X))+ " , Y = " + str(int(self.Y)) + ", Theta = " +  str(self.thetaRadian)),
+                font_name='Times New Roman',                      
+                font_size=15,
+                x= 400, y=20,
+                anchor_x='center', anchor_y='center',color=(0, 0, 255, 255))
+        self.centerLabel.draw()
         self.boundX1=[X3,Y3]
         self.boundY1=[X3+deltaX,Y3 +deltaY]
         self.boundX2=[X4,Y4]
         self.boundY2=[X4+deltaX, Y4 +deltaY]
+
+
+
 
 
 

@@ -91,5 +91,5 @@ class CarSprite():
     def runningCar(self,dt):
         self.updateX(self.getDeltaX())
         self.updateY(self.getDeltaY())
-        self.updateDeltaX(self.getDeltaX() * 0.95)
-        self.updateDeltaY(self.getDeltaY() * 0.95)
+        self.updateDeltaX(self.getDeltaX() * 0.10)
+        self.updateDeltaY(self.getDeltaY() * 0.10)

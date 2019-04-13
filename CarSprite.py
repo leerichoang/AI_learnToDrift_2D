@@ -11,7 +11,7 @@ class CarSprite():
         self.carSprite_image = pyglet.image.load('car_sprite5050.png')
         self.carSprite_image.anchor_x=25
         self.carSprite_image.anchor_y=25
-        self.carSprite= pyglet.sprite.Sprite(self.carSprite_image, 40+25, 60+25)
+        self.carSprite= pyglet.sprite.Sprite(self.carSprite_image, 50+25, 70+25)
         self.x = self.carSprite.x
         self.y = self.carSprite.y
         self.theta = self.carSprite.rotation

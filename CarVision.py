@@ -10,6 +10,7 @@ class CarVision:
         self.carBoxY1=[0,0]
         self.carBoxX2=[0,0]
         self.carBoxY2=[0,0]
+        self.allDistance = {}
     
     def drawCarBox(self):
         # Y1 - - Y2
@@ -50,6 +51,9 @@ class CarVision:
         self.carBoxY2=[X4+deltaX,Y4 +deltaY]
 
     def drawVisionLine(self):
+        counter = 0
+        color = [[255,0,0], [0,255,0], [0,0,255], [255,255,0], [0,255,255],
+        [255,0,255], [128,128,0], [0,0,0]]
         for i in range(-4,4,1):
             rToAdd = i * math.pi/4 
             #rToAdd = 0 * math.pi/4 
@@ -64,14 +68,31 @@ class CarVision:
             #find y intercept b=y - mx
             b = self.Y - slope*self.X
 
+            manitude=25
+            
+            line240 = False
             #2 check for vertical line at 1240
-            if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
-                manitude = (1240-self.X)/math.cos(self.thetaRadian+ rToAdd)
-            elif (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                manitude = (1240-self.X)/math.cos(self.thetaRadian+ rToAdd)
+            if (self.Y < 260 and self.Y >60) or (self.Y>460 and self.Y < 660):
+                #quad 1 
+                if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
+                    manitude = (1240-self.X)/math.cos(self.thetaRadian+ rToAdd)
+                #quad 4
+                elif (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
+                    manitude = (1240-self.X)/math.cos(self.thetaRadian+ rToAdd)
+            elif (self.Y>=260 and self.Y <=460):
+                if self.X <= 240 and self.X >=40:
+                    if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
+                        manitude = (240-self.X)/math.cos(self.thetaRadian+ rToAdd)
+                #quad 4
+                    elif (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
+                        manitude = (240-self.X)/math.cos(self.thetaRadian+ rToAdd)
+                    line240 = True
+
+                        
+
             
             #1 check for vertical line at 40
-            elif (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
+            if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
                 manitude = (40-self.X)/math.cos(self.thetaRadian+ rToAdd)
             elif (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) <0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
                 manitude = (40-self.X)/math.cos(self.thetaRadian+ rToAdd)
@@ -83,55 +104,67 @@ class CarVision:
                 testxbounce = (260-b)        
             if int(testxbounce) in range(240,1040):
                 if not (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) > 0) and (math.sin(self.thetaRadian+ rToAdd) > 0):
-                    #print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
-                    manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
+                    if self.Y < 260:
+                        manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
                 if (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
-                    #print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
-                    manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
-                #print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
+                    if self.Y < 260:
+                        manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
             
-            #4 check for horizontal line at 40,60 to 140 to 260 
+            #4 check for horizontal line at 40,60 to 1240 to 260
+             
             if slope!=0:
                 testxbounce = (60-b)/slope
             else:
                 testxbounce = (60-b)
             if int(testxbounce) in range(40,1240):
+                #quad
                 if (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                    #print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
-                    manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd))
+                    if line240 is False:
+                        manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd))
+                        print("her1")
                 if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                    #print(str(self.X) + " " + str(self.Y) + " " + str(slope) + " " +str(int(testxbounce)) + " hit " + str(math.sin(self.thetaRadian)) + " " + str(math.cos(self.thetaRadian)) )
-                    manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
+                    manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd))
+                    print("her1")
+             
 
-            
+            #manitude = min(manitude1,manitude2,manitude4)
             #calculate the x and y 
             deltaXVision = math.cos(self.thetaRadian+ rToAdd) * manitude
             deltaYVision = math.sin(self.thetaRadian+ rToAdd) * manitude
                 
             #draw the line
-            Line(self.X,self.Y,self.X+deltaXVision,self.Y+deltaYVision,[0,0,0],1).draw()
+            Line(self.X,self.Y,self.X+deltaXVision,self.Y+deltaYVision,color[counter],1).draw()
             
             #calculate the distance = c
             # a^2 + b^2 = c^2
             # c = sqrt(a^2 + b^2)
             # - 25 for from the center
             distance = math.sqrt(deltaXVision*deltaXVision + deltaYVision* deltaYVision) -25
-            
+            self.allDistance[i]=int(distance)
+
             #draw the distance label at each line end point 
             self.lineLabel = pyglet.text.Label( ( str(int(distance))+ " (" + str(int(self.X+deltaXVision)) + "," +str(int(self.Y+deltaYVision))+ ")"),
                 font_name='Times New Roman',                      
                 font_size=10,
                 x=self.X+deltaXVision, y=self.Y+deltaYVision,
-                anchor_x='center', anchor_y='center',color=(0, 0, 255, 255))
+                anchor_x='center', anchor_y='center',color=(0, (50 * i%250), (30 * i%250), 255))
             self.lineLabel.draw()
+            counter+=1
 
         #display center of carBox Label info
-        self.centerLabel = pyglet.text.Label(("Center X = " + str(int(self.X))+ " , Y = " + str(int(self.Y)) + ", Theta = " +  str(self.thetaRadian)),
+        self.centerLabel = pyglet.text.Label(("Center X = " + str(int(self.X))+ " , Y = " + str(int(self.Y)) + ", Theta = " +  str(self.thetaRadian/math.pi)+ " pi Degree = " + str(math.degrees(self.thetaRadian))),
                 font_name='Times New Roman',                      
                 font_size=15,
                 x= 400, y=20,
-                anchor_x='center', anchor_y='center',color=(0, 0, 255, 255))
+                color=(0, 0, 255, 255))
         self.centerLabel.draw()
+
+        self.centerLabel = pyglet.text.Label(("All Distance: "+ str(self.allDistance)),
+            font_name='Times New Roman',                      
+            font_size=15,
+                x=40 , y=700,color=(0, 0, 255 , 255))
+        self.centerLabel.draw()
+        
 
     def draw(self, x, y, thetaR):
         self.thetaRadian=thetaR

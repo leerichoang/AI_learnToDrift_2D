@@ -54,6 +54,10 @@ class CarVision:
         counter = 0
         color = [[255,0,0], [0,255,0], [0,0,255], [255,255,0], [0,255,255],
         [255,0,255], [128,128,0], [0,0,0]]
+
+
+
+        manitude=25
         for i in range(0,4,4):
             rToAdd = i * math.pi/4 
             #rToAdd = 0 * math.pi/4 
@@ -67,26 +71,17 @@ class CarVision:
 
             #find y intercept b=y - mx
             b = self.Y - slope*self.X
-
-            manitude=25
+            
+            #   outY1(40,660) - - - - - - - -  outY2(1240,660)
+            #    |  inY1(240,460) - - - - - inY2(1040,460) |
+            #    |   |                                 |   |
+            #    |   |                                 |   |
+            #    |  inX1(240,260) - - - - - inX2(1040,260) | 
+            #   outX1(40,60) - - - - - - - - -  outX2(1240,60)
+            
             
             line240 = False
-            #2 check for vertical line at 1240
-            # if (self.Y < 260 and self.Y >60) or (self.Y>460 and self.Y < 660):
-            #     #quad 1 
-            #     if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
-            #         manitude = (1240-self.X)/math.cos(self.thetaRadian+ rToAdd)
-            #     #quad 4
-            #     elif (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-            #         manitude = (1240-self.X)/math.cos(self.thetaRadian+ rToAdd)
-            # elif (self.Y>=260 and self.Y <=460):
-            #     if self.X <= 240 and self.X >=40:
-            #         if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
-            #             manitude = (240-self.X)/math.cos(self.thetaRadian+ rToAdd)
-            #     #quad 4
-            #         elif (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-            #             manitude = (240-self.X)/math.cos(self.thetaRadian+ rToAdd)
-            #         line240 = True
+            
 
             if (self.Y < 260 and self.Y >60) or (self.Y>460 and self.Y < 660):
                 #quad 1 

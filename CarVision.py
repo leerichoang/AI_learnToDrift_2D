@@ -219,6 +219,7 @@ class CarVision:
                 anchor_x='center', anchor_y='center',color=(0, (50 * i%250), (30 * i%250), 255))
             self.lineLabel.draw()
             counter+=1
+            print(self.isQuadrant4((self.thetaRadian+rToAdd)))
 
         #display center of carBox Label info
         self.centerLabel = pyglet.text.Label(("Center X = " + str(int(self.X))+ " , Y = " + str(int(self.Y)) + ", Theta = " +  str(self.thetaRadian/math.pi)+ " pi Degree = " + str(math.degrees(self.thetaRadian))),
@@ -234,6 +235,7 @@ class CarVision:
                 x=40 , y=700,color=(0, 0, 255 , 255))
         self.centerLabel.draw()
         
+        
 
     def draw(self, x, y, thetaR):
         self.thetaRadian=thetaR
@@ -242,9 +244,15 @@ class CarVision:
         self.drawCarBox()
         self.drawVisionLine()
         
+    def isQuadrant1(self, rTheta):
+        return (math.sin(rTheta) >=0 and math.cos(rTheta) >=0 and math.tan(rTheta) >=0)
+    
+    def isQuadrant2(self, rTheta):
+        return (math.sin(rTheta) >=0 and math.cos(rTheta) <0 and math.tan(rTheta) <0)
 
-
-
-
-
+    def isQuadrant3(self, rTheta):
+        return (math.sin(rTheta) <0 and math.cos(rTheta) <0 and math.tan(rTheta) >=0)
+    
+    def isQuadrant4(self, rTheta):
+        return (math.sin(rTheta) <0 and math.cos(rTheta) >=0 and math.tan(rTheta) <0)
 

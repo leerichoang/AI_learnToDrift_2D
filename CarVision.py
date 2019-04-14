@@ -55,10 +55,9 @@ class CarVision:
         color = [[255,0,0], [0,255,0], [0,0,255], [255,255,0], [0,255,255],
         [255,0,255], [128,128,0], [0,0,0]]
 
-
-
+        #start manitude
         manitude=25
-        for i in range(0,4,4):
+        for i in range(-4,4,1):
             rToAdd = i * math.pi/4 
             #rToAdd = 0 * math.pi/4 
             updatedTheta=self.thetaRadian + rToAdd
@@ -252,6 +251,7 @@ class CarVision:
             line260=False
             line460=False
             #Check for all horizontal lines
+            
             #Check for horizontal line from inX1 to inX2
             if slope!=0:
                 testxbounce = (260-b)/slope
@@ -282,6 +282,7 @@ class CarVision:
                         manitude = ((testxbounce-self.X)/math.cos(updatedTheta))
                         line460=True 
             
+            #Check for horizontal line from outX1 to outX2
             if slope!=0:
                 testxbounce = (60-b)/slope
             else:
@@ -320,30 +321,53 @@ class CarVision:
                                 manitude = ((testxbounce-self.X)/math.cos(updatedTheta))
                     elif self.X>=240 and self.X <1040:
                         if self.Y >=60 and self.Y <260:
+                            manitude = ((testxbounce-self.X)/math.cos(updatedTheta))
+            
+            #Check for horizontal line from outY1 to outY2
+            if slope!=0:
+                testxbounce = (660-b)/slope
+            else:
+                testxbounce = (660-b)
+            if int(testxbounce) in range(40,1240):
+                if self.isQuadrant1(updatedTheta):
+                    if self.X>=40 and self.X <240:
+                        if not(line240 or line260):
+                            manitude = ((testxbounce-self.X)/math.cos(updatedTheta))
+                    elif self.X>=1040 and self.X < 1240:
+                        testmanitude = (1240-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision >= 60 and self.Y + deltaYVision < 660):
+                            manitude = testmanitude
+                        else:
+                            manitude = ((testxbounce-self.X)/math.cos(updatedTheta))
+                    elif self.X>=240 and self.X <1040:
+                        if self.Y >=460 and self.Y <660:
+                            manitude = ((testxbounce-self.X)/math.cos(updatedTheta))
+                elif self.isQuadrant2(updatedTheta):
+                    if self.X>=40 and self.X <240:
+                        testmanitude = (40-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision >= 60 and self.Y + deltaYVision < 660):
+                            manitude = testmanitude
+                        else:
+                            manitude = ((testxbounce-self.X)/math.cos(updatedTheta))
+                    elif self.X>=1040 and self.X < 1240:
+                        if not (line1040 or line260):
                             testmanitude = (40-self.X)/math.cos(updatedTheta)
                             deltaYVision = math.sin(updatedTheta) * testmanitude
                             if (self.Y + deltaYVision >= 60 and self.Y + deltaYVision < 660):
                                 manitude = testmanitude
                             else:
                                 manitude = ((testxbounce-self.X)/math.cos(updatedTheta))
+                    elif self.X>=240 and self.X <1040:
+                        if self.Y >=460 and self.Y <660:
+                            manitude = ((testxbounce-self.X)/math.cos(updatedTheta))
 
             
-
-
-        
-
-                    
-
-
-
-
-
-
-
             #manitude = min(manitude1,manitude2,manitude4)
             #calculate the x and y 
-            deltaXVision = math.cos(self.thetaRadian+ rToAdd) * manitude
-            deltaYVision = math.sin(self.thetaRadian+ rToAdd) * manitude
+            deltaXVision = math.cos(updatedTheta) * manitude
+            deltaYVision = math.sin(updatedTheta) * manitude
                 
             #draw the line
             Line(self.X,self.Y,self.X+deltaXVision,self.Y+deltaYVision,color[counter],1).draw()
@@ -378,8 +402,6 @@ class CarVision:
                 x=40 , y=700,color=(0, 0, 255 , 255))
         self.centerLabel.draw()
         
-        
-
     def draw(self, x, y, thetaR):
         self.thetaRadian=thetaR
         self.X=x

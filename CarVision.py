@@ -61,13 +61,14 @@ class CarVision:
         for i in range(0,4,4):
             rToAdd = i * math.pi/4 
             #rToAdd = 0 * math.pi/4 
+            updatedTheta=self.thetaRadian + rToAdd
             
             #y=mx+b
             #b=y - mx
             #x = (b-y)/m
             
             #find slope
-            slope=math.tan(self.thetaRadian + rToAdd)
+            slope=math.tan(updatedTheta)
 
             #find y intercept b=y - mx
             b = self.Y - slope*self.X
@@ -81,116 +82,162 @@ class CarVision:
             
             
             line240 = False
-            
-
-            if (self.Y < 260 and self.Y >60) or (self.Y>460 and self.Y < 660):
+            line1040 = False
+            #Check for All Verical line Interception
+            #broke up into location of car in height (self.Y)
+            #   then quadrant and location of car in width(self.X)
+            if (self.Y < 260 and self.Y >=60):
                 #quad 1 
-                if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
+                if self.isQuadrant1(updatedTheta):
                     if (self.X < 240 and self.X >=40):
-                        testmanitude = (240-self.X)/math.cos(self.thetaRadian+ rToAdd)
-                        deltaYVision = math.sin(self.thetaRadian+ rToAdd) * testmanitude
-                        if (self.Y + deltaYVision >= 260 and self.Y + deltaYVision <= 460):
+                        testmanitude = (240-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision > 260 and self.Y + deltaYVision <= 460):
                             manitude = testmanitude
-                            line240 = True   
-                            print("here3")
+                            line240 = True  
                         else:
-                            manitude = (1240-self.X)/math.cos(self.thetaRadian+ rToAdd)
+                            manitude = (1240-self.X)/math.cos(updatedTheta)
                     else:
-                        manitude = (1240-self.X)/math.cos(self.thetaRadian+ rToAdd)
-                        print("here4")
+                        manitude = (1240-self.X)/math.cos(updatedTheta)
                 #quad 4
-                elif (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                    manitude = (1240-self.X)/math.cos(self.thetaRadian+ rToAdd)
-            elif (self.Y>=260 and self.Y <=460):
+                elif self.isQuadrant4(updatedTheta):
+                    manitude = (1240-self.X)/math.cos(updatedTheta)
+                #quad 2
+                elif self.isQuadrant2(updatedTheta):
+                    if (self.X < 240 and self.X >=40):
+                        manitude = (40-self.X)/math.cos(updatedTheta)
+                    elif (self.X >=1040 and self.X <1240):
+                        testmanitude = (1040-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision > 260 and self.Y + deltaYVision <= 460):
+                            manitude = testmanitude
+                            line1040 = True  
+                        else:
+                            manitude = (40-self.X)/math.cos(updatedTheta)
+                    else:
+                        manitude = (40-self.X)/math.cos(updatedTheta)
+
+                #quad 3
+                elif self.isQuadrant3(updatedTheta):
+                    if (self.X < 240 and self.X >=40):
+                        manitude = (40-self.X)/math.cos(updatedTheta)
+                    elif (self.X >=1040 and self.X <1240):
+                        testmanitude = (1040-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision > 260 and self.Y + deltaYVision <= 460):
+                            manitude = testmanitude
+                            line1040 = True  
+                        else:
+                            manitude = (40-self.X)/math.cos(updatedTheta)
+                    else:
+                        manitude = (40-self.X)/math.cos(updatedTheta)
+
+            elif (self.Y>=260 and self.Y <460):
                 if self.X <= 240 and self.X >=40:
-                #quad1
-                    if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
-                        testmanitude = (240-self.X)/math.cos(self.thetaRadian+ rToAdd)
-                        deltaYVision = math.sin(self.thetaRadian+ rToAdd) * testmanitude
-                        if (self.Y + deltaYVision >= 260 and self.Y + deltaYVision <= 460):
+                    #quad1
+                    if self.isQuadrant1(updatedTheta):
+                        testmanitude = (240-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision >= 260 and self.Y + deltaYVision < 460):
                             manitude = testmanitude
                             line240 = True   
-                            print("here1")
-                #quad 4
-                    elif (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                        testmanitude = (240-self.X)/math.cos(self.thetaRadian+ rToAdd)
-                        deltaYVision = math.sin(self.thetaRadian+ rToAdd) * testmanitude
-                        if (self.Y + deltaYVision >= 260 and self.Y + deltaYVision <= 460):
+                    #quad 4
+                    elif self.isQuadrant4(updatedTheta):
+                        testmanitude = (240-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision >= 260 and self.Y + deltaYVision < 460):
                             manitude = testmanitude
-                            line240 = True   
-                            print("here2")
+                            line240 = True
+                    #quad 2
+                    elif self.isQuadrant2(updatedTheta):
+                        manitude = (40-self.X)/math.cos(updatedTheta)
+                    #quad 3
+                    elif self.isQuadrant3(updatedTheta):
+                        manitude = (40-self.X)/math.cos(updatedTheta)
+                elif self.X >=1040 and self.X <1240:
+                    #quad1
+                    if self.isQuadrant1(updatedTheta):
+                        manitude = (1240-self.X)/math.cos(updatedTheta)
+                    #quad 4
+                    elif self.isQuadrant4(updatedTheta):
+                        manitude = (1240-self.X)/math.cos(updatedTheta)
+                    #quad 2
+                    elif self.isQuadrant2(updatedTheta):
+                        testmanitude = (1040-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision >= 260 and self.Y + deltaYVision < 460):
+                            manitude = testmanitude
+                            line1040 = True
+                    #quad 3
+                    elif self.isQuadrant3(updatedTheta):
+                        testmanitude = (1040-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision >= 260 and self.Y + deltaYVision < 460):
+                            manitude = testmanitude
+                            line1040 = True
 
+                    
+            elif (self.Y >= 460 and self.Y < 660):
+                #quad 1 
+                if self.isQuadrant1(updatedTheta):
+                    if (self.X < 240 and self.X >=40):
+                        testmanitude = (240-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision > 260 and self.Y + deltaYVision <= 460):
+                            manitude = testmanitude
+                            line240 = True  
+                        else:
+                            manitude = (1240-self.X)/math.cos(updatedTheta)
                     else:
-                        print("h3")
-                else:
-                    print("h4")
+                        manitude = (1240-self.X)/math.cos(updatedTheta)
+                #quad 4
+                elif self.isQuadrant4(updatedTheta):
+                    if (self.X < 240 and self.X >=40):
+                        testmanitude = (240-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision > 260 and self.Y + deltaYVision <= 460):
+                            manitude = testmanitude
+                            line240 = True  
+                        else:
+                            manitude = (1240-self.X)/math.cos(updatedTheta)
+                    else:
+                        manitude = (1240-self.X)/math.cos(updatedTheta)
+                #quad 2
+                elif self.isQuadrant2(updatedTheta):
+                    if (self.X >= 1040 and self.X <1240):
+                        testmanitude = (1040-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision >= 260 and self.Y + deltaYVision < 460):
+                            manitude = testmanitude
+                            line1040 = True
+                        else:
+                            manitude = (40-self.X)/math.cos(updatedTheta)
+                    else:
+                        manitude = (40-self.X)/math.cos(updatedTheta)
+                #quad 3
+                elif self.isQuadrant3(updatedTheta):
+                    if (self.X >= 1040 and self.X <1240):
+                        testmanitude = (1040-self.X)/math.cos(updatedTheta)
+                        deltaYVision = math.sin(updatedTheta) * testmanitude
+                        if (self.Y + deltaYVision >= 260 and self.Y + deltaYVision < 460):
+                            manitude = testmanitude
+                            line1040 = True
+                        else:
+                            manitude = (40-self.X)/math.cos(updatedTheta)
+                    else:
+                        manitude = (40-self.X)/math.cos(updatedTheta)
 
-            elif (self.Y>460):
-                print("here")
+            #Check for all horizontal lines
+        
 
-                        
+                    
 
-            
-            #1 check for vertical line at 40
-            if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                manitude = (40-self.X)/math.cos(self.thetaRadian+ rToAdd)
-            elif (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) <0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
-                manitude = (40-self.X)/math.cos(self.thetaRadian+ rToAdd)
-                
-            #8 check for horizontal line at 240,260 to 1040 to 260
-            if slope!=0:
-                testxbounce = (260-b)/slope
-            else:
-                testxbounce = (260-b)        
-            if int(testxbounce) in range(240,1040):
-                if not (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) > 0) and (math.sin(self.thetaRadian+ rToAdd) > 0):
-                    if self.Y < 260:
-                        manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
-                if (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
-                    if self.Y < 260:
-                        manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
-            
-            #4 check for horizontal line at 40,60 to 1240 to 260
-             
-            if slope!=0:
-                testxbounce = (60-b)/slope
-            else:
-                testxbounce = (60-b)
-            if int(testxbounce) in range(40,1240):
-                #quad
-                if (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                    if line240 is False:
-                        manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd))
-                if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                    manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd))
-            
-            #
-            if slope!=0:
-                testxbounce = (660-b)/slope
-            else:
-                testxbounce = (660-b)        
-            if int(testxbounce) in range(40,1240):
-                if not (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) > 0) and (math.sin(self.thetaRadian+ rToAdd) > 0):
-                    if self.Y > 660 :
-                        if line240 is False:
-                            manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
-                if (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) >= 0):
-                    if self.Y > 660 or self.X <240 or self.X >1040:
-                        manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd)) 
-            if slope!=0:
-                testxbounce = (460-b)/slope
-            else:
-                testxbounce = (460-b)
-            if int(testxbounce) in range(240,1040):
-                #quad
-                if (slope<0) and  (math.cos(self.thetaRadian+ rToAdd) >= 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                    if self.Y > 460:
-                        if line240 is False:
-                            manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd))
-                if (slope>=0) and  (math.cos(self.thetaRadian+ rToAdd) < 0) and (math.sin(self.thetaRadian+ rToAdd) < 0):
-                    if self.Y > 460:
-                        if line240 is False:
-                            manitude = ((testxbounce-self.X)/math.cos(self.thetaRadian+ rToAdd))
+
+
+
+
+
+
             #manitude = min(manitude1,manitude2,manitude4)
             #calculate the x and y 
             deltaXVision = math.cos(self.thetaRadian+ rToAdd) * manitude
@@ -214,7 +261,6 @@ class CarVision:
                 anchor_x='center', anchor_y='center',color=(0, (50 * i%250), (30 * i%250), 255))
             self.lineLabel.draw()
             counter+=1
-            print(self.isQuadrant4((self.thetaRadian+rToAdd)))
 
         #display center of carBox Label info
         self.centerLabel = pyglet.text.Label(("Center X = " + str(int(self.X))+ " , Y = " + str(int(self.Y)) + ", Theta = " +  str(self.thetaRadian/math.pi)+ " pi Degree = " + str(math.degrees(self.thetaRadian))),

@@ -54,6 +54,7 @@ class CarVision:
         counter = 0
         color = [[255,0,0], [0,255,0], [0,0,255], [255,255,0], [0,255,255],
         [255,0,255], [128,128,0], [0,0,0]]
+        colorNameKey = {-4:"RED", -3:"GREEN", -2:"BlUE", -1:"YELLOWR", 0:"TEAL", 1:"PURPLE", 2:"YELLOWL", 3:"BLACK"}
 
         #start manitude
         manitude=25
@@ -377,7 +378,7 @@ class CarVision:
             # c = sqrt(a^2 + b^2)
             # - 25 for from the center
             distance = math.sqrt(deltaXVision*deltaXVision + deltaYVision* deltaYVision) -25
-            self.allDistance[i]=int(distance)
+            self.allDistance[colorNameKey[i]]=int(distance)
 
             #draw the distance label at each line end point 
             self.lineLabel = pyglet.text.Label( ( str(int(distance))+ " (" + str(int(self.X+deltaXVision)) + "," +str(int(self.Y+deltaYVision))+ ")"),

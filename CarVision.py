@@ -447,16 +447,13 @@ class CarVision:
         Line(1040,300,1240,270,[0,0,0],1).draw()
         Line(600,460,800,660,[0,0,0],1).draw()
         if self.isCarBoxCollision([40,400],[240,400]):
-            print("touch")
+            print("touch [40,400],[240,400] ")
         elif self.isCarBoxCollision([600,60],[600,260]):
-            print("touch")
+            print("touch [600,60],[600,260]")
         elif self.isCarBoxCollision([1040,300],[1240,270]):
-            print("touch")
+            print("touch [1040,300],[1240,270]")
         elif self.isCarBoxCollision([600,460],[800,660]):
-            print("touch")
-        else:
-            print("not")
-        
+            print("touch [600,460],[800,660]")        
     def isQuadrant1(self, rTheta):
         return (math.sin(rTheta) >=0 and math.cos(rTheta) >=0 and math.tan(rTheta) >=0)
     
@@ -570,7 +567,11 @@ class CarVision:
     def isCarBoxCollision(self,line2PointX1Y1, line2PointX2Y2):
         pam1 = line2PointX1Y1
         pam2 = line2PointX2Y2
-        return (self.isCarBoxLineX1X2Collision(pam1, pam2) or self.isCarBoxLineY1Y2Collision(pam1, pam2) or self.isCarBoxLineX1Y1Collision(pam1, pam2) or self.isCarBoxLineX2Y2Collision(pam1, pam2))
+
+        if (self.isCarBoxLineX1X2Collision(pam1, pam2) or self.isCarBoxLineY1Y2Collision(pam1, pam2) or self.isCarBoxLineX1Y1Collision(pam1, pam2) or self.isCarBoxLineX2Y2Collision(pam1, pam2)):
+            return True
+        else:
+            return False
     
     #   outY1(40,660) - - - - - - - -  outY2(1240,660)
     #    |  inY1(240,460) - - - - - inY2(1040,460) |
@@ -583,7 +584,12 @@ class CarVision:
     def isOutTrackCollision(self):
         return(self.isCarBoxCollision([40,60],[1240,60]) or self.isCarBoxCollision([40,660],[1240,660]) or self.isCarBoxCollision([40,60],[40,660]) or self.isCarBoxCollision([1240,60],[1240,660]))
     def isBothTrackCollision(self):
-        return (self.isInTrackCollision()or self.isOutTrackCollision())
+        if (self.isInTrackCollision()or self.isOutTrackCollision()):
+            print("touch track")
+            return True
+        else:
+            print("not")
+            return False
 
     def getDistanceFromColorLine(self,color):
         return self.allDistance[color]

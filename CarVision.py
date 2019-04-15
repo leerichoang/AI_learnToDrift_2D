@@ -442,18 +442,53 @@ class CarVision:
         self.drawCarBox()
         self.drawVisionLine()
         #test out touching
-        Line(40,400,240, 400,[0,0,0],1).draw()
-        Line(600,60,600,260,[0,0,0],1).draw()
-        Line(1040,300,1240,270,[0,0,0],1).draw()
-        Line(600,460,800,660,[0,0,0],1).draw()
-        if self.isCarBoxCollision([40,400],[240,400]):
-            print("touch [40,400],[240,400] ")
-        elif self.isCarBoxCollision([600,60],[600,260]):
-            print("touch [600,60],[600,260]")
-        elif self.isCarBoxCollision([1040,300],[1240,270]):
-            print("touch [1040,300],[1240,270]")
-        elif self.isCarBoxCollision([600,460],[800,660]):
-            print("touch [600,460],[800,660]")        
+        #   outY1(40,660) - - - - - - - -  outY2(1240,660)
+        #    |  inY1(240,460) - - - - - inY2(1040,460) |
+        #    |   |                                 |   |
+        #    |   |                                 |   |
+        #    |  inX1(240,260) - - - - - inX2(1040,260) | 
+        #   outX1(40,60) - - - - - - - - -  outX2(1240,60)
+        #1
+        Line(240,260,240,60,[0,0,0],1).draw()
+        #2
+        Line(640,260,640,60,[0,0,0],1).draw()
+        #3
+        Line(1040,260,1040,60,[0,0,0],1).draw()
+        #4
+        Line(1040,260,1040,60,[0,0,0],1).draw()
+        #5
+        Line(1040,360,1240,360,[0,0,0],1).draw()
+        #6
+        Line(1040,460,1040,660,[0,0,0],1).draw()
+        #7
+        Line(640,460,640,660,[0,0,0],1).draw()
+        #8
+        Line(240,460,240,660,[0,0,0],1).draw()
+        #9
+        Line(240,360,40,360,[0,0,0],1).draw()
+        #1End
+
+        #Check Points
+        if self.isCarBoxCollision([240,260],[240,60]):
+            print("CheckPoint 1")
+        elif self.isCarBoxCollision([640,260],[640,60]):
+            print("CheckPoint 2")
+        elif self.isCarBoxCollision([1040,260],[1040,60]):
+            print("CheckPoint 3")
+        elif self.isCarBoxCollision([1040,260],[1240,60]):
+            print("CheckPoint 4")  
+        elif self.isCarBoxCollision([1040,360],[1240,360]):
+            print("CheckPoint 5")
+        elif self.isCarBoxCollision([1040,460],[1040,660]):
+            print("CheckPoint 6")
+        elif self.isCarBoxCollision([640,460],[640,660]):
+            print("CheckPoint 7")
+        elif self.isCarBoxCollision([240,460],[240,660]):
+            print("CheckPoint 8")  
+        elif self.isCarBoxCollision([240,360],[40,360]):
+            print("CheckPoint 9")  
+
+
     def isQuadrant1(self, rTheta):
         return (math.sin(rTheta) >=0 and math.cos(rTheta) >=0 and math.tan(rTheta) >=0)
     

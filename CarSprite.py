@@ -11,11 +11,11 @@ class CarSprite():
         self.carSprite_image = pyglet.image.load('car_sprite5050.png')
         self.carSprite_image.anchor_x=25
         self.carSprite_image.anchor_y=25
-        self.carSprite= pyglet.sprite.Sprite(self.carSprite_image, 40+25, 60+25)
+        self.carSprite= pyglet.sprite.Sprite(self.carSprite_image, 100, 100)
         self.x = self.carSprite.x
         self.y = self.carSprite.y
         self.theta = self.carSprite.rotation
-        self.speed = 200.0
+        self.speed = 100.0
         self.rotation_speed = 220.0
         self.deltaX = 0.0
         self.deltaY = 0.0
@@ -61,32 +61,92 @@ class CarSprite():
         self.deltaY = value
 
     def turnLeft(self,dt):
-        self.updateTheta(-self.rotation_speed* dt)
-        #print(str(self.getX())+ " "+ str(self.getY()))
+        # if not self.carVision.isBothTrackCollision():
+        #     self.updateTheta(-self.rotation_speed*dt)
+        # else:
+        #     self.updateTheta(self.rotation_speed *dt)
+        self.updateTheta(-self.rotation_speed*dt)
+        if self.carVision.isBothTrackCollision():
+            self.updateTheta(self.rotation_speed* dt)
+
 
     def turnRight(self,dt):
+        # if not self.carVision.isBothTrackCollision():
+        #     self.updateTheta(self.rotation_speed* dt)
+        # else:
+        #     self.updateTheta(-self.rotation_speed * dt)
         self.updateTheta(self.rotation_speed* dt)
-        #print(str(self.getX())+ " "+ str(self.getY()))
-    
+        if self.carVision.isBothTrackCollision():
+            self.updateTheta(-self.rotation_speed*dt)
+
     def goStraight(self,dt):
+        #if not (self.carVision.isBothTrackCollision()) and self.carVision.getDistanceFromColorLine("TEAL")>=0:
+    
         thetaRadian = -math.radians(self.getTheta())
         deltaX = math.cos(thetaRadian) * self.speed * dt
         deltaY = math.sin(thetaRadian) * self.speed * dt
+        print("yelp")
         self.updateX(deltaX)
         self.updateY(deltaY)
         self.updateDeltaX(deltaX)
         self.updateDeltaY(deltaY)
-        #print(str(self.getX())+ " "+ str(self.getY()))
+        if self.carVision.isBothTrackCollision():
+            thetaRadian = -math.radians(self.getTheta())
+            deltaX = math.cos(thetaRadian) * self.speed * dt
+            deltaY = math.sin(thetaRadian) * self.speed * dt
+            self.updateX(-deltaX)
+            self.updateY(-deltaY)
+            self.updateDeltaX(-deltaX)
+            self.updateDeltaY(-deltaY)
+
+
+
+
+        # else:
+        #     if self.carVision.getDistanceFromColorLine("RED")>=0:
+        #         # thetaRadian = -math.radians(self.getTheta())
+        #         # deltaX = math.cos(thetaRadian) * 20
+        #         # deltaY = math.sin(thetaRadian) * 20
+        #         # self.updateX(-deltaX)
+        #         # self.updateY(-deltaY)
+        #         # self.updateDeltaX(-deltaX)
+        #         # self.updateDeltaY(-deltaY)
+        #         self.goReverse(dt)
     
     def goReverse(self,dt):
+        # if not self.carVision.isBothTrackCollision():
+        #     thetaRadian = -math.radians(self.getTheta())
+        #     deltaX = math.cos(thetaRadian) * self.speed * dt
+        #     deltaY = math.sin(thetaRadian) * self.speed * dt
+        #     self.updateX(-deltaX)
+        #     self.updateY(-deltaY)
+        #     self.updateDeltaX(-deltaX)
+        #     self.updateDeltaY(-deltaY)
+        # else:
+        #     thetaRadian = -math.radians(self.getTheta())
+        #     deltaX = math.cos(thetaRadian) * self.speed * dt
+        #     deltaY = math.sin(thetaRadian) * self.speed * dt
+        #     print("yelp")
+        #     self.updateX(deltaX)
+        #     self.updateY(deltaY)
+        #     self.updateDeltaX(deltaX)
+        #     self.updateDeltaY(deltaY)
         thetaRadian = -math.radians(self.getTheta())
         deltaX = math.cos(thetaRadian) * self.speed * dt
         deltaY = math.sin(thetaRadian) * self.speed * dt
         self.updateX(-deltaX)
         self.updateY(-deltaY)
         self.updateDeltaX(-deltaX)
-        self.updateDeltaY(-deltaY)  
-        #print(str(self.getX())+ " "+ str(self.getY()))
+        self.updateDeltaY(-deltaY)
+        if self.carVision.isBothTrackCollision() and self.carVision.getDistanceFromColorLine("TEAL")>=0:
+            thetaRadian = -math.radians(self.getTheta())
+            deltaX = math.cos(thetaRadian) * self.speed * dt
+            deltaY = math.sin(thetaRadian) * self.speed * dt
+            print("yelp")
+            self.updateX(deltaX)
+            self.updateY(deltaY)
+            self.updateDeltaX(deltaX)
+            self.updateDeltaY(deltaY)
 
     def runningCar(self,dt):
         self.updateX(self.getDeltaX())

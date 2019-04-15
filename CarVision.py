@@ -86,7 +86,7 @@ class CarVision:
         counter = 0
         color = [[255,0,0], [0,255,0], [0,0,255], [255,255,0], [0,255,255],
         [255,0,255], [128,128,0], [0,0,0]]
-        colorNameKey = {-4:"RED", -3:"GREEN", -2:"BlUE", -1:"YELLOWR", 0:"TEAL", 1:"PURPLE", 2:"YELLOWL", 3:"BLACK"}
+        colorNameKey = {-4:"RED", -3:"GREEN", -2:"BLUE", -1:"YELLOWR", 0:"TEAL", 1:"PURPLE", 2:"YELLOWL", 3:"BLACK"}
 
         #start manitude
         manitude=25
@@ -441,17 +441,18 @@ class CarVision:
         self.Y=y
         self.drawCarBox()
         self.drawVisionLine()
+        #test out touching
         Line(40,400,240, 400,[0,0,0],1).draw()
         Line(600,60,600,260,[0,0,0],1).draw()
         Line(1040,300,1240,270,[0,0,0],1).draw()
         Line(600,460,800,660,[0,0,0],1).draw()
-        if self.isLineCollision(self.carBoxX1,self.carBoxX2,[40,400],[240,400]):
+        if self.isCarBoxCollision([40,400],[240,400]):
             print("touch")
-        elif self.isLineCollision(self.carBoxX1,self.carBoxX2,[600,60],[600,260]):
+        elif self.isCarBoxCollision([600,60],[600,260]):
             print("touch")
-        elif self.isLineCollision(self.carBoxX1,self.carBoxX2,[1040,300],[1240,270]):
+        elif self.isCarBoxCollision([1040,300],[1240,270]):
             print("touch")
-        elif self.isLineCollision(self.carBoxX1,self.carBoxX2,[600,460],[800,660]):
+        elif self.isCarBoxCollision([600,460],[800,660]):
             print("touch")
         else:
             print("not")
@@ -558,9 +559,34 @@ class CarVision:
                     if line1Ypoints[y1] == line2Ypoints[y1]:
                         return True
         
-        
-            
+    def isCarBoxLineX1X2Collision(self,line2PointX1Y1, line2PointX2Y2):
+        return self.isLineCollision(self.carBoxX1,self.carBoxX2,line2PointX1Y1,line2PointX2Y2)
+    def isCarBoxLineY1Y2Collision(self,line2PointX1Y1, line2PointX2Y2):
+        return self.isLineCollision(self.carBoxY1,self.carBoxY2,line2PointX1Y1,line2PointX2Y2)
+    def isCarBoxLineX1Y1Collision(self,line2PointX1Y1, line2PointX2Y2):
+        return self.isLineCollision(self.carBoxX1,self.carBoxY1,line2PointX1Y1,line2PointX2Y2)
+    def isCarBoxLineX2Y2Collision(self,line2PointX1Y1, line2PointX2Y2):
+        return self.isLineCollision(self.carBoxX2,self.carBoxY2,line2PointX1Y1,line2PointX2Y2)
+    def isCarBoxCollision(self,line2PointX1Y1, line2PointX2Y2):
+        pam1 = line2PointX1Y1
+        pam2 = line2PointX2Y2
+        return (self.isCarBoxLineX1X2Collision(pam1, pam2) or self.isCarBoxLineY1Y2Collision(pam1, pam2) or self.isCarBoxLineX1Y1Collision(pam1, pam2) or self.isCarBoxLineX2Y2Collision(pam1, pam2))
+    
+    #   outY1(40,660) - - - - - - - -  outY2(1240,660)
+    #    |  inY1(240,460) - - - - - inY2(1040,460) |
+    #    |   |                                 |   |
+    #    |   |                                 |   |
+    #    |  inX1(240,260) - - - - - inX2(1040,260) | 
+    #   outX1(40,60) - - - - - - - - -  outX2(1240,60)
+    def isInTrackCollision(self):
+        return(self.isCarBoxCollision([240,260],[1040,260]) or self.isCarBoxCollision([240,460],[1040,460]) or self.isCarBoxCollision([240,260],[240,460]) or self.isCarBoxCollision([1040,260],[1040,460]))
+    def isOutTrackCollision(self):
+        return(self.isCarBoxCollision([40,60],[1240,60]) or self.isCarBoxCollision([40,660],[1240,660]) or self.isCarBoxCollision([40,60],[40,660]) or self.isCarBoxCollision([1240,60],[1240,660]))
+    def isBothTrackCollision(self):
+        return (self.isInTrackCollision()or self.isOutTrackCollision())
 
+    def getDistanceFromColorLine(self,color):
+        return self.allDistance[color]
         
 
 

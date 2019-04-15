@@ -50,6 +50,38 @@ class CarVision:
         self.carBoxX2=[X3+deltaX,Y3 +deltaY]
         self.carBoxY2=[X4+deltaX,Y4 +deltaY]
 
+        
+        self.lineLabel = pyglet.text.Label((str(int(self.carBoxX1[0])) + " , " + str(int(self.carBoxX1[1]))),
+            font_name='Times New Roman',                      
+            font_size=10,
+            x=self.carBoxX1[0], y=self.carBoxX1[1],
+            anchor_x='center', anchor_y='center',color=(0, (255), 0, 255))
+        self.lineLabel.draw()
+        
+        self.lineLabel = pyglet.text.Label((str(int(self.carBoxY1[0])) + " , " + str(int(self.carBoxY1[1]))),
+            font_name='Times New Roman',                      
+            font_size=10,
+            x=self.carBoxY1[0], y=self.carBoxY1[1],
+            anchor_x='center', anchor_y='center',color=(0, (255), 0, 255))
+        self.lineLabel.draw()
+
+        self.lineLabel = pyglet.text.Label((str(int(self.carBoxX2[0])) + " , " + str(int(self.carBoxX2[1]))),
+            font_name='Times New Roman',                      
+            font_size=10,
+            x=self.carBoxX2[0], y=self.carBoxX2[1],
+            anchor_x='center', anchor_y='center',color=(0, (255), 0, 255))
+        self.lineLabel.draw()
+
+        self.lineLabel = pyglet.text.Label((str(int(self.carBoxY2[0])) + " , " + str(int(self.carBoxY2[1]))),
+            font_name='Times New Roman',                      
+            font_size=10,
+            x=self.carBoxY2[0], y=self.carBoxY2[1],
+            anchor_x='center', anchor_y='center',color=(0, (255), 0, 255))
+        self.lineLabel.draw()
+
+
+        
+
     def drawVisionLine(self):
         counter = 0
         color = [[255,0,0], [0,255,0], [0,0,255], [255,255,0], [0,255,255],
@@ -409,6 +441,20 @@ class CarVision:
         self.Y=y
         self.drawCarBox()
         self.drawVisionLine()
+        Line(40,400,240, 400,[0,0,0],1).draw()
+        Line(600,60,600,260,[0,0,0],1).draw()
+        Line(1040,300,1240,270,[0,0,0],1).draw()
+        Line(600,460,800,660,[0,0,0],1).draw()
+        if self.isLineCollision(self.carBoxX1,self.carBoxX2,[40,400],[240,400]):
+            print("touch")
+        elif self.isLineCollision(self.carBoxX1,self.carBoxX2,[600,60],[600,260]):
+            print("touch")
+        elif self.isLineCollision(self.carBoxX1,self.carBoxX2,[1040,300],[1240,270]):
+            print("touch")
+        elif self.isLineCollision(self.carBoxX1,self.carBoxX2,[600,460],[800,660]):
+            print("touch")
+        else:
+            print("not")
         
     def isQuadrant1(self, rTheta):
         return (math.sin(rTheta) >=0 and math.cos(rTheta) >=0 and math.tan(rTheta) >=0)
@@ -421,4 +467,101 @@ class CarVision:
     
     def isQuadrant4(self, rTheta):
         return (math.sin(rTheta) <0 and math.cos(rTheta) >=0 and math.tan(rTheta) <0)
+
+    def isLineCollision(self, line1PointX1Y1, line1PointX2Y2, line2PointX1Y1, line2PointX2Y2):
+        
+        #y=mx+b
+        #b=y - mx
+        #x = (b-y)/m
+        
+        #Find equation of line1
+        # line1PointX1Y1 = [x1,y1]
+        # line1PointX2Y2 = [x2,y2]
+
+        #slope    
+        line1Rise = int(line1PointX2Y2[1] - line1PointX1Y1[1])
+        line1Run = int(line1PointX2Y2[0] - line1PointX1Y1[0])
+        line1Slope=0
+
+        line1StartPoint = int(min(line1PointX1Y1[0], line1PointX2Y2[0]))
+        line1EndPoint = int(max(line1PointX1Y1[0], line1PointX2Y2[0]))
+        line1Ypoints ={}
+        if line1Run!=0:
+            line1Slope = line1Rise / line1Run
+            line1B= int(line1PointX1Y1[1] - (line1Slope*line1PointX1Y1[0]))
+            #line 1 equation
+            #line1Function = y1
+            # y1 = (line1Slope*x) + line1B
+            for x in range(line1StartPoint, line1EndPoint+1):
+                line1Ypoints[x] = int((line1Slope*x) + line1B)
+            line1noSlope = False
+        else:
+            line1StartRange = int(min(line1PointX1Y1[1], line1PointX2Y2[1]))
+            line1SEndRange = int(max(line1PointX1Y1[1], line1PointX2Y2[1]))
+            for i in range(line1StartRange, line1SEndRange):
+                line1Ypoints[i]=int(line1PointX1Y1[0])
+            line1noSlope = True
+        
+        #Find equation of line2
+        # line2PointX1Y1 = [x1,y1]
+        # line2PointX2Y2 = [x2,y2]
+
+        #slope    
+        line2Rise = int(line2PointX2Y2[1] - line2PointX1Y1[1])
+        line2Run = int(line2PointX2Y2[0] - line2PointX1Y1[0])
+        line2Slope=0
+
+        line2StartPoint = int(min(line2PointX1Y1[0], line2PointX2Y2[0]))
+        line2EndPoint = int(max(line2PointX1Y1[0], line2PointX2Y2[0]))
+        line2Ypoints ={}
+        if line2Run!=0:
+            line2Slope = line2Rise / line2Run
+            line2B= int(line2PointX1Y1[1] - (line2Slope*line2PointX1Y1[0]))
+            #line 2 equation
+            #line2Function = y1
+            # y2 = (line2Slope*x) + line2B
+            for x in range(line2StartPoint, line2EndPoint+1):
+                line2Ypoints[x] = int((line2Slope*x) + line2B)
+            line2noSlope = False
+        else:
+            line2StartRange = int(min(line2PointX1Y1[1], line2PointX2Y2[1]))
+            line2SEndRange = int(max(line2PointX1Y1[1], line2PointX2Y2[1]))
+            for i in range(line2StartRange, line2SEndRange):
+                line2Ypoints[i]=int(line2PointX1Y1[0])
+            line2noSlope = True
+
+        
+        
+        
+        # #check for collision
+
+        if line2noSlope and not line1noSlope:
+            for x1, y1 in line1Ypoints.items():
+                if y1 in line2Ypoints:
+                    if x1==line2Ypoints[y1]:
+                        return True
+        elif line1noSlope and not line2noSlope:
+            for x2, y2 in line2Ypoints.items():
+                if y2 in line1Ypoints:
+                    if x2==line1Ypoints[y2]:
+                        return True
+        elif not (line1noSlope or line2noSlope):
+            for x1 in range(line1StartPoint, line1EndPoint+1):
+                if line1Slope!=0:
+                    expectedX1 = int(((line2Slope*x1) + line2B - line1B)/line1Slope)
+                    if expectedX1 in range(line2StartPoint, line2EndPoint+1):
+                        if expectedX1 in range(line1StartPoint, line1EndPoint+1):
+                            return True
+        elif (line1noSlope or line2noSlope):
+            for y1, x1 in line1Ypoints.items():
+                if y1 in line2Ypoints:
+                    if line1Ypoints[y1] == line2Ypoints[y1]:
+                        return True
+        
+        
+            
+
+        
+
+
 
